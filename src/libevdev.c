@@ -160,6 +160,20 @@ int EvdevProbe(EvdevPtr device) {
                     Event_To_String(EV_KEY, i));
   }
 
+  len = ioctl(fd, EVIOCGBIT(EV_MSC, sizeof(info->msc_bitmask)),
+              info->msc_bitmask);
+  if (len < 0) {
+      LOG_ERROR(device, "ioctl EVIOCGBIT(EV_MSC) failed: %s\n",
+                strerror(errno));
+      return !Success;
+  }
+  for (i = 0; i < len*8; i++) {
+      if (TestBit(i, info->msc_bitmask)) {
+          LOG_DEBUG(device, "Has MSC[%d] = %s\n", i,
+                    Event_To_String(EV_MSC, i));
+      }
+  }
+
   len = ioctl(fd, EVIOCGBIT(EV_LED, sizeof(info->led_bitmask)),
               info->led_bitmask);
   if (len < 0) {

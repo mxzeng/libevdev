@@ -45,6 +45,7 @@ struct EvdevInfo_ {
   unsigned long bitmask[NLONGS(EV_CNT)];
   unsigned long key_bitmask[NLONGS(KEY_CNT)];
   unsigned long rel_bitmask[NLONGS(REL_CNT)];
+  unsigned long msc_bitmask[NLONGS(MSC_CNT)];
   unsigned long abs_bitmask[NLONGS(ABS_CNT)];
   unsigned long led_bitmask[NLONGS(LED_CNT)];
   struct input_absinfo absinfo[ABS_CNT];

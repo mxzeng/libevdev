@@ -51,6 +51,8 @@ static void Event_Abs_Update_Pressure(EvdevPtr, struct input_event*);
 
 static void Event_Rel(EvdevPtr, struct input_event*);
 
+static void Event_Msc(EvdevPtr, struct input_event*);
+
 static void Event_Get_Time(struct timeval*, bool);
 
 static int Event_Is_Valid(struct input_event*);
@@ -205,6 +207,13 @@ Event_Get_Button(EvdevPtr device, int button)
     return TestBit(button, device->key_state_bitmask);
 }
 
+int
+Event_Get_Timestamp(EvdevPtr device)
+{
+    EventStatePtr evstate = device->evstate;
+    return evstate->msc_timestamp;
+}
+
 #define CASE_RETURN(s) \
     case (s):\
         return #s
@@ -273,6 +282,13 @@ Event_To_String(int type, int code) {
             break;
         }
         break;
+    case EV_MSC:
+        switch (code) {
+        CASE_RETURN(MSC_TIMESTAMP);
+        default:
+            break;
+        }
+        break;
     default:
         break;
     }
@@ -327,6 +343,7 @@ Event_Init(EvdevPtr device)
             }
         }
     }
+    evstate->msc_timestamp = 0;
     return Success;
 }
 
@@ -490,6 +507,10 @@ Event_Process(EvdevPtr device, struct input_event* ev)
 
     case EV_REL:
         Event_Rel(device, ev);
+        break;
+
+    case EV_MSC:
+        Event_Msc(device, ev);
         break;
 
     default:
@@ -695,6 +716,18 @@ Event_Rel(EvdevPtr device, struct input_event* ev)
         break;
     case REL_HWHEEL:
         evstate->rel_hwheel = ev->value;
+        break;
+    }
+}
+
+static void
+Event_Msc(EvdevPtr device, struct input_event* ev)
+{
+    EventStatePtr evstate = device->evstate;
+
+    switch (ev->code) {
+    case MSC_TIMESTAMP:
+        evstate->msc_timestamp = ev->value;
         break;
     }
 }

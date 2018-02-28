@@ -30,6 +30,8 @@ typedef struct {
     int rel_wheel;
     int rel_hwheel;
 
+    int msc_timestamp;
+
     struct input_absinfo* mt_axes[_ABS_MT_CNT];
 
     /* Log of recent input_event structs for debugging */
@@ -63,6 +65,7 @@ int Event_Get_Button_Left(EvdevPtr);
 int Event_Get_Button_Middle(EvdevPtr);
 int Event_Get_Button_Right(EvdevPtr);
 int Event_Get_Button(EvdevPtr, int button);
+int Event_Get_Timestamp(EvdevPtr);
 void Event_Sync_State(EvdevPtr);
 const char* Event_To_String(int type, int code);
 const char* Event_Type_To_String(int type);
