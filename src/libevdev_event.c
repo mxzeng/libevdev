@@ -18,6 +18,10 @@
 #define BTN_TOOL_QUINTTAP  0x148  /* Five fingers on trackpad */
 #endif
 
+#ifndef REL_WHEEL_HI_RES
+#define REL_WHEEL_HI_RES 0x0b
+#endif
+
 /* Set clockid to be used for timestamps */
 #ifndef EVIOCSCLOCKID
 #define EVIOCSCLOCKID  _IOW('E', 0xa0, int)
@@ -258,6 +262,7 @@ Event_To_String(int type, int code) {
         CASE_RETURN(REL_X);
         CASE_RETURN(REL_Y);
         CASE_RETURN(REL_WHEEL);
+        CASE_RETURN(REL_WHEEL_HI_RES);
         CASE_RETURN(REL_HWHEEL);
         default:
             break;
@@ -586,6 +591,7 @@ Event_Clear_Ev_Rel_State(EvdevPtr device)
     evstate->rel_x = 0;
     evstate->rel_y = 0;
     evstate->rel_wheel = 0;
+    evstate->rel_wheel_hi_res = 0;
     evstate->rel_hwheel = 0;
 }
 
@@ -713,6 +719,9 @@ Event_Rel(EvdevPtr device, struct input_event* ev)
         break;
     case REL_WHEEL:
         evstate->rel_wheel = ev->value;
+        break;
+    case REL_WHEEL_HI_RES:
+        evstate->rel_wheel_hi_res = ev->value;
         break;
     case REL_HWHEEL:
         evstate->rel_hwheel = ev->value;

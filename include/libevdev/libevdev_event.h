@@ -28,6 +28,7 @@ typedef struct {
     int rel_x;
     int rel_y;
     int rel_wheel;
+    int rel_wheel_hi_res;
     int rel_hwheel;
 
     int msc_timestamp;
